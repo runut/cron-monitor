@@ -1,0 +1,30 @@
+name: cron application
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'cron job'
+        required: true
+        default: 'main'
+
+
+jobs:
+  check-banff:
+    runs-on: ubuntu-latest
+    container: python:3.9
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: pip3 install -r requirements.txt
+
+    - name: Run script
+      run: python3 banff.py
+      env:
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        TO_EMAIL: ${{ secrets.TO_EMAIL }}

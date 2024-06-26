@@ -1,0 +1,11 @@
+stages:
+  - check-baff
+
+check_condition:
+  stage: check-baff
+  image: python:3.9  # Use an image that includes Python
+  script:
+    - pip3 install -r requirements.txt
+    - python3 banff.py
+  # only:
+  #   - schedules
