@@ -2,6 +2,34 @@ import requests
 from datetime import datetime, timedelta
 from email_sender import send_email 
 
+
+def filter_dates_with_consecutive_days(dates_list):
+    # Convert the list to tuples of (label, date)
+    dates = [(item.split(": ")[0], datetime.strptime(item.split(": ")[1], "%Y-%m-%d")) for item in dates_list]
+
+    # Sort dates by the date
+    dates.sort(key=lambda x: x[1])
+
+    # Function to check if there's at least one pair of consecutive days
+    def has_consecutive_dates(dates, date):
+        for i in range(0, len(dates)):
+            if date == dates[i][1]:
+                if i > 0:
+                    if dates[i - 1][1] == date - timedelta(days=1):
+                        return True
+                if i < len(dates) - 1:
+                    if dates[i + 1][1] == date + timedelta(days=1):
+                        return True
+        return False
+
+    # Filter the list to keep only items with at least one consecutive pair of dates
+    new_datas_list = []
+    for item in dates_list:
+       date = datetime.strptime(item.split(": ")[1], "%Y-%m-%d")
+       if has_consecutive_dates(dates, date):
+           new_datas_list.append(item)
+    return new_datas_list
+
 def avai_checker():
   # Set the end date
   end_date = datetime.strptime("2025-09-15", "%Y-%m-%d")
@@ -47,6 +75,10 @@ def avai_checker():
     #   for availability in map_availabilities:
     #     if availability == 0:
     #       date_avai.append("Tent: 2024-08-24")
+  # date_avai.append("Tent: 2024-08-24")
+  # date_avai.append("Tent: 2024-08-22")
+  if len(date_avai) > 0:
+    date_avai = filter_dates_with_consecutive_days(date_avai)
   return {
     "avai": False if len(date_avai) == 0 else True,
     "date": str(date_avai)
