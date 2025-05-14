@@ -64,7 +64,7 @@ def avai_checker():
           avi_date = current_date.strftime("%Y-%m-%d")
           if availability == 0 and avi_date in ['2025-05-17', '2025-05-18', '2025-06-28', '2025-06-29', '2025-06-30', '2025-08-02', '2025-08-03']:
               date_avai.append(name + ": " + current_date.strftime("%Y-%m-%d"))
-          elif availability == 0 and current_date.weekday() in [5, 6]:  # 4 is Firday, 5 is Saturday
+          elif availability == 0 and current_date.weekday() in [4, 5, 6]:  # 4 is Firday, 5 is Saturday
               date_avai.append(name + ": " + current_date.strftime("%Y-%m-%d"))
           current_date += timedelta(days=1)
     # url = 'https://reservation.pc.gc.ca/api/availability/map?mapId=-2147483606&startDate=2024-08-24&endDate=2024-08-25&getDailyAvailability=false&isReserving=true'
